@@ -411,3 +411,7 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+.favorites-section {
+  border-color: rgba(255, 215, 0, 0.2);
+}
