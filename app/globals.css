@@ -37,6 +37,10 @@ input {
   font: inherit;
 }
 
+button {
+  -webkit-tap-highlight-color: rgba(124, 91, 255, 0.2);
+}
+
 .page-shell {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -404,15 +408,47 @@ h1 {
 
 @media (max-width: 640px) {
   .page-shell {
-    padding: 24px 16px 60px;
+    padding: 20px 16px 60px;
   }
 
   .search-panel {
     flex-direction: column;
   }
 
+  .search-input-wrapper input {
+    min-width: 0;
+    width: 100%;
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .category-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-tag {
+    flex-shrink: 0;
+  }
+
+  .section-block {
+    padding: 24px 20px;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .site-card {
+    padding: 20px;
+  }
+
+  .hero-visual {
+    display: none;
   }
 }
 
