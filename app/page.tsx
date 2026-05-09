@@ -1,15 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { ADSENSE_CONFIG } from '../config/adsense';
-import { curatedSites, allTags } from './data/sites';
-import { Site } from './types';
+import { curatedSites } from './data/sites';
+import CategoryNav from './components/CategoryNav';
+import SiteCard from './components/SiteCard';
+import FavoritesPanel from './components/FavoritesPanel';
+import { useFavorites } from './hooks/useFavorites';
+import { useKeyboard } from './hooks/useKeyboard';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
-  const [networkResults, setNetworkResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [activeCategory, setActiveCategory] = useState('全部');
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+  const handleSlash = useCallback(() => {
+    searchRef.current?.focus();
+  }, []);
+
+  const handleEscape = useCallback(() => {
+    setQuery('');
+    searchRef.current?.blur();
+  }, []);
+
+  useKeyboard({
+    onSlash: handleSlash,
+    onEscape: handleEscape,
+    searchRef: searchRef,
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -19,44 +39,27 @@ export default function HomePage() {
   }, []);
 
   const filteredSites = useMemo(() => {
-    if (!query.trim()) return curatedSites;
-    const lower = query.toLowerCase();
-    return curatedSites.filter(
-      (site) =>
-        site.name.toLowerCase().includes(lower) ||
-        site.description.toLowerCase().includes(lower) ||
-        site.tag.toLowerCase().includes(lower),
-    );
-  }, [query]);
+    let sites = curatedSites;
 
-  const searchNetwork = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await fetch('https://api.publicapis.org/entries?category=Games');
-      if (!response.ok) {
-        throw new Error('网络请求失败，请稍后重试。');
-      }
-      const data = await response.json();
-      const entries = Array.isArray(data.entries) ? data.entries : [];
-      const results = entries
-        .filter((entry: any) => {
-          if (!query.trim()) return true;
-          const term = query.toLowerCase();
-          return (
-            entry.API.toLowerCase().includes(term) ||
-            entry.Description.toLowerCase().includes(term) ||
-            entry.Link.toLowerCase().includes(term)
-          );
-        })
-        .slice(0, 8);
-      setNetworkResults(results);
-    } catch (err) {
-      setError((err as Error).message ?? '加载失败');
-    } finally {
-      setLoading(false);
+    if (activeCategory !== '全部') {
+      sites = sites.filter((site) => site.tag === activeCategory);
     }
-  };
+
+    if (query.trim()) {
+      const lower = query.toLowerCase();
+      sites = sites.filter(
+        (site) =>
+          site.name.toLowerCase().includes(lower) ||
+          site.description.toLowerCase().includes(lower) ||
+          site.tag.toLowerCase().includes(lower)
+      );
+    }
+
+    return sites;
+  }, [query, activeCategory]);
+
+  const hasResults = filteredSites.length > 0;
+  const hasSearch = query.trim() !== '';
 
   return (
     <main className="page-shell">
@@ -68,21 +71,27 @@ export default function HomePage() {
             汇集热门游戏平台、资讯媒体、社区与工具，一站直达你的游戏世界。
           </p>
           <div className="search-panel">
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="搜索游戏网站、资讯、攻略…"
-            />
-            <button onClick={searchNetwork} disabled={loading}>
-              {loading ? '搜索中…' : '联网搜索推荐'}
-            </button>
+            <div className="search-input-wrapper">
+              <input
+                ref={searchRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="搜索游戏网站、资讯、攻略… 按 / 聚焦"
+              />
+              {query && (
+                <button
+                  className="clear-button"
+                  onClick={() => setQuery('')}
+                  aria-label="清除搜索"
+                  type="button"
+                >
+                  ×
+                </button>
+              )}
+            </div>
           </div>
           <div className="hero-tags">
-            <span>热门</span>
-            <span>直播</span>
-            <span>优惠</span>
-            <span>独立</span>
-            <span>评测</span>
+            <span>按 / 键快速搜索</span>
           </div>
         </div>
         <div className="hero-visual">
@@ -126,57 +135,45 @@ export default function HomePage() {
           </div>
           <span>{filteredSites.length} 个匹配结果</span>
         </div>
-        <div className="grid-list">
-          {filteredSites.map((site) => (
-            <a key={site.name} href={site.url} target="_blank" rel="noreferrer" className="site-card">
-              <div>
-                <p className="site-tag">{site.tag}</p>
-                <h3>{site.name}</h3>
-                <p>{site.description}</p>
-              </div>
-              <span>访问 →</span>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <section className="section-block network-section">
-        <div className="section-header">
-          <div>
-            <h2>联网推荐结果</h2>
-            <p>实时查询游戏相关公开 API 信息，为你的导航站提供更多灵感。</p>
-          </div>
-          <button className="refresh-button" onClick={searchNetwork} disabled={loading}>
-            刷新推荐
-          </button>
-        </div>
-
-        {error ? <p className="error-message">{error}</p> : null}
-
-        <div className="network-grid">
-          {networkResults.length > 0 ? (
-            networkResults.map((item) => (
-              <a
-                key={item.Link}
-                href={item.Link}
-                target="_blank"
-                rel="noreferrer"
-                className="network-card"
-              >
-                <div>
-                  <h3>{item.API}</h3>
-                  <p>{item.Description}</p>
-                </div>
-                <span>{item.Category}</span>
-              </a>
+        <CategoryNav
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
+        <div className="grid-list" style={{ marginTop: '24px' }}>
+          {hasResults ? (
+            filteredSites.map((site) => (
+              <SiteCard
+                key={site.name}
+                site={site}
+                isFavorite={isFavorite(site.name)}
+                onToggleFavorite={() => toggleFavorite(site.name)}
+              />
             ))
-          ) : (
+          ) : hasSearch ? (
             <div className="empty-state">
-              <p>点击“联网搜索推荐”获取最新游戏相关站点和 API 建议。</p>
+              <p>没有找到匹配结果</p>
+              <button
+                className="refresh-button"
+                onClick={() => {
+                  setQuery('');
+                  setActiveCategory('全部');
+                }}
+                type="button"
+              >
+                清除搜索
+              </button>
             </div>
-          )}
+          ) : null}
         </div>
       </section>
+
+      {favorites.length > 0 && (
+        <FavoritesPanel
+          favorites={favorites}
+          isFavorite={isFavorite}
+          onToggleFavorite={toggleFavorite}
+        />
+      )}
     </main>
   );
 }
