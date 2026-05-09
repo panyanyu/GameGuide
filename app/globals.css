@@ -338,6 +338,34 @@ h1 {
   color: #8ca0ff;
 }
 
+.site-card-content {
+  flex: 1;
+}
+
+.site-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #8ca0ff;
+  padding: 4px 8px;
+  transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+}
+
+.favorite-btn.favorited {
+  color: #ffd700;
+}
+
 .refresh-button {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
