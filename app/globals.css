@@ -169,6 +169,35 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.category-tag {
+  font-size: 0.92rem;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d3d8ff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(124, 91, 255, 0.3);
+}
+
+.category-tag.active {
+  background: rgba(124, 91, 255, 0.2);
+  border-color: rgba(124, 91, 255, 0.5);
+  color: #c7d1ff;
+}
+
 .hero-visual {
   position: relative;
 }
