@@ -8,6 +8,8 @@ import SiteCard from './components/SiteCard';
 import FavoritesPanel from './components/FavoritesPanel';
 import { useFavorites } from './hooks/useFavorites';
 import { useKeyboard } from './hooks/useKeyboard';
+import NewsSection from './components/NewsSection';
+import { useNews } from './hooks/useNews';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
@@ -15,6 +17,7 @@ export default function HomePage() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { items, loading, error, refresh } = useNews();
 
   const handleSlash = useCallback(() => {
     searchRef.current?.focus();
@@ -126,6 +129,13 @@ export default function HomePage() {
           data-full-width-responsive="true"
         />
       </section>
+
+      <NewsSection
+        items={items}
+        loading={loading}
+        error={error}
+        onRefresh={refresh}
+      />
 
       <section className="section-block">
         <div className="section-header">
