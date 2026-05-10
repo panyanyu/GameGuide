@@ -9,7 +9,7 @@ import FavoritesPanel from './components/FavoritesPanel';
 import { useFavorites } from './hooks/useFavorites';
 import { useKeyboard } from './hooks/useKeyboard';
 import NewsSection from './components/NewsSection';
-import { useNews } from './hooks/useNews';
+import { useNewsFeed } from './hooks/useNewsFeed';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
@@ -17,7 +17,7 @@ export default function HomePage() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { items, loading, error, refresh } = useNews();
+  const { items, loading, error, refresh } = useNewsFeed();
 
   const handleSlash = useCallback(() => {
     searchRef.current?.focus();
@@ -131,7 +131,7 @@ export default function HomePage() {
       </section>
 
       <NewsSection
-        items={items}
+        items={items.slice(0, 5)}
         loading={loading}
         error={error}
         onRefresh={refresh}

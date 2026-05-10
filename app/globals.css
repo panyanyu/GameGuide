@@ -440,6 +440,29 @@ h1 {
   padding: 0 16px;
 }
 
+.news-more-link {
+  font-size: 0.9rem;
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.news-more-link:hover {
+  text-decoration: underline;
+}
+
+.news-time {
+  margin-left: auto;
+  color: #8ca0ff;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.news-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .masonry-grid {
   column-count: 3;
   column-gap: 16px;

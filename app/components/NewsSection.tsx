@@ -1,6 +1,6 @@
 'use client';
 
-import { NewsItem } from '../hooks/useNews';
+import { NewsItem } from '../hooks/useNewsFeed';
 
 interface NewsSectionProps {
   items: NewsItem[];
@@ -9,21 +9,31 @@ interface NewsSectionProps {
   onRefresh: () => void;
 }
 
-const SOURCE_LABELS = {
+const SOURCE_LABELS: Record<string, string> = {
   steam: 'Steam',
+  '3dm': '3DM',
   gamersky: '游民星空',
+  nga: 'NGA',
 };
 
-const SOURCE_COLORS = {
-  steam: {
-    bg: 'rgba(59, 130, 246, 0.15)',
-    text: '#60a5fa',
-  },
-  gamersky: {
-    bg: 'rgba(251, 146, 60, 0.15)',
-    text: '#fb923c',
-  },
+const SOURCE_COLORS: Record<string, { bg: string; text: string }> = {
+  steam: { bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa' },
+  '3dm': { bg: 'rgba(139, 92, 246, 0.15)', text: '#a78bfa' },
+  gamersky: { bg: 'rgba(251, 146, 60, 0.15)', text: '#fb923c' },
+  nga: { bg: 'rgba(74, 222, 128, 0.15)', text: '#4ade80' },
 };
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  if (hours < 1) return '刚刚';
+  if (hours < 24) return `${hours}小时前`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}天前`;
+  return date.toLocaleDateString('zh-CN');
+}
 
 export default function NewsSection({
   items,
@@ -35,14 +45,9 @@ export default function NewsSection({
     <section className="news-section">
       <div className="news-header">
         <h2>🎮 游戏资讯</h2>
-        <button
-          className="refresh-button"
-          onClick={onRefresh}
-          disabled={loading}
-          type="button"
-        >
-          {loading ? '刷新中...' : '刷新'}
-        </button>
+        <a href="/news" className="news-more-link">
+          查看更多 →
+        </a>
       </div>
 
       {loading && items.length === 0 ? (
@@ -75,13 +80,14 @@ export default function NewsSection({
                 <span
                   className="news-source"
                   style={{
-                    background: SOURCE_COLORS[item.source].bg,
-                    color: SOURCE_COLORS[item.source].text,
+                    background: SOURCE_COLORS[item.source]?.bg,
+                    color: SOURCE_COLORS[item.source]?.text,
                   }}
                 >
-                  {SOURCE_LABELS[item.source]}
+                  {SOURCE_LABELS[item.source] || item.source}
                 </span>
                 <span className="news-title">{item.title}</span>
+                <span className="news-time">{formatDate(item.pubDate)}</span>
               </a>
             </li>
           ))}
