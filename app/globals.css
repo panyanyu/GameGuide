@@ -249,6 +249,30 @@ h1 {
   margin-bottom: 6px;
 }
 
+/* News Page */
+.news-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+
+.news-page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+@media (max-width: 640px) {
+  .news-page-header {
+    padding: 16px;
+  }
+
+  .news-page-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
 .section-block {
   margin-top: 36px;
   padding: 32px;
