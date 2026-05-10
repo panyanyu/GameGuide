@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git add *)",
       "Bash(git commit -m 'docs: add game news section design spec *)",
-      "Bash(git commit -m 'docs: add game news section implementation plan *)"
+      "Bash(git commit -m 'docs: add game news section implementation plan *)",
+      "Bash(npx tsc *)"
     ]
   }
 }
