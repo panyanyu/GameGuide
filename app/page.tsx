@@ -115,18 +115,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="adsense-block">
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block', textAlign: 'center' }}
-          data-ad-client={ADSENSE_CONFIG.clientId}
-          data-ad-slot={ADSENSE_CONFIG.homepageSlot}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-      </section>
+      </section> 
 
       <section className="section-block">
         <div className="section-header">
