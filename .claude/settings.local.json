@@ -4,7 +4,12 @@
       "Bash(npx tsc *)",
       "Bash(npx typescript *)",
       "Bash(git add *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(rm -rf .next)",
+      "Bash(npm run *)",
+      "Bash(mkdir -p \"f:/项目/GameGuide/app/[locale]/news\")",
+      "Bash(mv \"f:/项目/GameGuide/app/news/page.tsx\" \"f:/项目/GameGuide/app/[locale]/news/page.tsx\")",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
