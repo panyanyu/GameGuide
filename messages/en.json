@@ -1,0 +1,63 @@
+{
+  "common": {
+    "home": "Home",
+    "deals": "Deals",
+    "search": "Search",
+    "clear": "Clear",
+    "loading": "Loading...",
+    "noResults": "No matching results",
+    "error": "Something went wrong, please try again",
+    "favorite": "Add to favorites",
+    "unfavorite": "Remove from favorites"
+  },
+  "home": {
+    "eyebrow": "Game Guide",
+    "title": "GameGuide",
+    "description": "Your gateway to gaming platforms, media, communities and tools. One click to your gaming world.",
+    "searchPlaceholder": "Search games, news, guides... Press / to focus",
+    "searchHint": "Press / to search quickly",
+    "featured": "Featured Today",
+    "featuredDesc": "Quick access to authoritative gaming sites, news media and community resources.",
+    "sitesCount": "Hot Sites",
+    "recommendCount": "Live Picks",
+    "infoCount": "Gaming News",
+    "sectionTitle": "Game Directory",
+    "sectionDesc": "Find gaming resources quickly by category.",
+    "resultsCount": "results",
+    "clearSearch": "Clear Search"
+  },
+  "deals": {
+    "eyebrow": "Game Deals",
+    "title": "Best Prices",
+    "description": "Search game titles and compare prices across Steam, Epic, GOG, WeGame and more.",
+    "searchPlaceholder": "Search game title...",
+    "searching": "Searching...",
+    "search": "Search",
+    "noResults": "No games found, try a different keyword",
+    "startSearch": "Enter a game title to search",
+    "loading": "Searching for game prices...",
+    "searchFailed": "Search failed, please try again",
+    "noPrice": "No price",
+    "cheapestLabel": "Cheapest"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "description": "Save your favorite gaming sites for quick access.",
+    "empty": "No favorites yet",
+    "emptyHint": "Click ☆ on a site card to add favorites"
+  },
+  "category": {
+    "all": "All",
+    "store": "Store",
+    "community": "Community",
+    "media": "Media",
+    "streaming": "Streaming",
+    "tool": "Tool",
+    "data": "Data",
+    "indie": "Indie",
+    "deal": "Deals"
+  },
+  "siteCard": {
+    "visit": "Visit →"
+  }
+}

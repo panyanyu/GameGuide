@@ -4,6 +4,8 @@ import { GameDeal } from '../types/deals';
 
 interface DealCardProps {
   game: GameDeal;
+  cheapestLabel?: string;
+  noPriceText?: string;
 }
 
 const SHOP_COLORS: Record<string, string> = {
@@ -13,7 +15,7 @@ const SHOP_COLORS: Record<string, string> = {
   wegame: '#ff6b00',
 };
 
-export function DealCard({ game }: DealCardProps) {
+export function DealCard({ game, cheapestLabel = '最低价', noPriceText = '暂无价格' }: DealCardProps) {
   return (
     <div className="deal-card">
       <div className="deal-card-image">
@@ -46,14 +48,14 @@ export function DealCard({ game }: DealCardProps) {
                   </span>
                 </>
               ) : (
-                <span className="deal-shop-noprice">暂无价格</span>
+                <span className="deal-shop-noprice">{noPriceText}</span>
               )}
             </a>
           ))}
         </div>
         {game.cheapest !== null && game.cheapestCut > 0 && (
           <div className="deal-cheapest">
-            最低价: ¥{game.cheapest.toFixed(2)} (-{game.cheapestCut}%)
+            {cheapestLabel}: ¥{game.cheapest.toFixed(2)} (-{game.cheapestCut}%)
           </div>
         )}
       </div>

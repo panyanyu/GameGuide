@@ -5,9 +5,11 @@ import { useState, FormEvent } from 'react';
 interface DealsSearchProps {
   onSearch: (query: string) => void;
   loading: boolean;
+  placeholder?: string;
+  buttonText?: string;
 }
 
-export function DealsSearch({ onSearch, loading }: DealsSearchProps) {
+export function DealsSearch({ onSearch, loading, placeholder = '搜索游戏名称...', buttonText = '搜索' }: DealsSearchProps) {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e: FormEvent) => {
@@ -24,7 +26,7 @@ export function DealsSearch({ onSearch, loading }: DealsSearchProps) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="搜索游戏名称..."
+          placeholder={placeholder}
           className="deals-search-input"
         />
         {query && (
@@ -39,7 +41,7 @@ export function DealsSearch({ onSearch, loading }: DealsSearchProps) {
         )}
       </div>
       <button type="submit" className="deals-search-btn" disabled={loading || !query.trim()}>
-        {loading ? '搜索中...' : '搜索'}
+        {buttonText}
       </button>
     </form>
   );

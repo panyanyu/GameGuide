@@ -5,9 +5,11 @@ import { DealCard } from './DealCard';
 
 interface DealsGridProps {
   games: GameDeal[];
+  cheapestLabel?: string;
+  noPriceText?: string;
 }
 
-export function DealsGrid({ games }: DealsGridProps) {
+export function DealsGrid({ games, cheapestLabel, noPriceText }: DealsGridProps) {
   if (games.length === 0) {
     return null;
   }
@@ -15,7 +17,7 @@ export function DealsGrid({ games }: DealsGridProps) {
   return (
     <div className="deals-grid">
       {games.map((game) => (
-        <DealCard key={game.id} game={game} />
+        <DealCard key={game.id} game={game} cheapestLabel={cheapestLabel} noPriceText={noPriceText} />
       ))}
     </div>
   );

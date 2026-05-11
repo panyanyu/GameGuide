@@ -1,15 +1,23 @@
 'use client';
 
 import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
-import { ADSENSE_CONFIG } from '../config/adsense';
-import { curatedSites } from './data/sites';
-import CategoryNav from './components/CategoryNav';
-import SiteCard from './components/SiteCard';
-import FavoritesPanel from './components/FavoritesPanel';
-import { useFavorites } from './hooks/useFavorites';
-import { useKeyboard } from './hooks/useKeyboard';
+import { useTranslations } from 'next-intl';
+import { ADSENSE_CONFIG } from '../../config/adsense';
+import { curatedSites } from '../data/sites';
+import CategoryNav from '../components/CategoryNav';
+import SiteCard from '../components/SiteCard';
+import FavoritesPanel from '../components/FavoritesPanel';
+import { useFavorites } from '../hooks/useFavorites';
+import { useKeyboard } from '../hooks/useKeyboard';
+import Link from 'next/link';
 
 export default function HomePage() {
+  const t = useTranslations('home');
+  const tCategory = useTranslations('category');
+  const tFavorites = useTranslations('favorites');
+  const tSiteCard = useTranslations('siteCard');
+  const tCommon = useTranslations('common');
+
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('全部');
   const searchRef = useRef<HTMLInputElement>(null);
@@ -61,28 +69,46 @@ export default function HomePage() {
   const hasResults = filteredSites.length > 0;
   const hasSearch = query.trim() !== '';
 
+  const allTags = useMemo(() => {
+    const tags = new Set<string>(['全部']);
+    curatedSites.forEach((site) => tags.add(site.tag));
+    return Array.from(tags);
+  }, []);
+
+  const getCategoryKey = (tag: string): string => {
+    const mapping: Record<string, string> = {
+      '商店': 'store',
+      '社区': 'community',
+      '媒体': 'media',
+      '直播': 'streaming',
+      '工具': 'tool',
+      '数据': 'data',
+      '独立': 'indie',
+      '优惠': 'deal',
+    };
+    return mapping[tag] || tag;
+  };
+
   return (
     <main className="page-shell">
       <section className="hero">
         <div className="hero-copy">
-          <p className="eyebrow">游戏导航</p>
-          <h1>GameGuide</h1>
-          <p className="description">
-            汇集热门游戏平台、资讯媒体、社区与工具，一站直达你的游戏世界。
-          </p>
+          <p className="eyebrow">{t('eyebrow')}</p>
+          <h1>{t('title')}</h1>
+          <p className="description">{t('description')}</p>
           <div className="search-panel">
             <div className="search-input-wrapper">
               <input
                 ref={searchRef}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="搜索游戏网站、资讯、攻略… 按 / 聚焦"
+                placeholder={t('searchPlaceholder')}
               />
               {query && (
                 <button
                   className="clear-button"
                   onClick={() => setQuery('')}
-                  aria-label="清除搜索"
+                  aria-label={tCommon('clear')}
                   type="button"
                 >
                   ×
@@ -91,44 +117,51 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hero-tags">
-            <span>按 / 键快速搜索</span>
-            <a href="/deals" className="category-tag">折扣比价</a>
+            <span>{t('searchHint')}</span>
+            <Link href="/deals" className="category-tag">{tCommon('deals')}</Link>
           </div>
         </div>
         <div className="hero-visual">
           <div className="glass-card">
-            <h2>今日精选</h2>
-            <p>快速访问权威游戏站点、新闻媒体和社区资源。</p>
+            <h2>{t('featured')}</h2>
+            <p>{t('featuredDesc')}</p>
             <div className="stats-grid">
               <div>
                 <strong>12+</strong>
-                <span>热门站点</span>
+                <span>{t('sitesCount')}</span>
               </div>
               <div>
                 <strong>8</strong>
-                <span>实时推荐</span>
+                <span>{t('recommendCount')}</span>
               </div>
               <div>
                 <strong>24/7</strong>
-                <span>游戏资讯</span>
+                <span>{t('infoCount')}</span>
               </div>
             </div>
           </div>
         </div>
-      </section> 
+      </section>
 
       <section className="section-block">
         <div className="section-header">
           <div>
-            <h2>游戏导航目录</h2>
-            <p>根据标签快速查找你需要的游戏资源。</p>
+            <h2>{t('sectionTitle')}</h2>
+            <p>{t('sectionDesc')}</p>
           </div>
-          <span>{filteredSites.length} 个匹配结果</span>
+          <span>{filteredSites.length} {t('resultsCount')}</span>
         </div>
-        <CategoryNav
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+        <nav className="category-nav" aria-label="站点分类">
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              className={`category-tag ${activeCategory === tag ? 'active' : ''}`}
+              onClick={() => setActiveCategory(tag)}
+            >
+              {tag === '全部' ? tCategory('all') : tCategory(getCategoryKey(tag))}
+            </button>
+          ))}
+        </nav>
         <div className="grid-list" style={{ marginTop: '24px' }}>
           {hasResults ? (
             filteredSites.map((site) => (
@@ -137,11 +170,14 @@ export default function HomePage() {
                 site={site}
                 isFavorite={isFavorite(site.name)}
                 onToggleFavorite={() => toggleFavorite(site.name)}
+                favoriteLabel={tCommon('favorite')}
+                unfavoriteLabel={tCommon('unfavorite')}
+                visitText={tSiteCard('visit')}
               />
             ))
           ) : hasSearch ? (
             <div className="empty-state">
-              <p>没有找到匹配结果</p>
+              <p>{tCommon('noResults')}</p>
               <button
                 className="refresh-button"
                 onClick={() => {
@@ -150,7 +186,7 @@ export default function HomePage() {
                 }}
                 type="button"
               >
-                清除搜索
+                {t('clearSearch')}
               </button>
             </div>
           ) : null}
@@ -162,6 +198,11 @@ export default function HomePage() {
           favorites={favorites}
           isFavorite={isFavorite}
           onToggleFavorite={toggleFavorite}
+          title={tFavorites('title')}
+          description={tFavorites('description')}
+          emptyText={tFavorites('empty')}
+          emptyHint={tFavorites('emptyHint')}
+          favoriteCountText={(count) => `你收藏了 ${count} 个站点`}
         />
       )}
     </main>

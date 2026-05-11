@@ -1,0 +1,63 @@
+{
+  "common": {
+    "home": "首页",
+    "deals": "折扣",
+    "search": "搜索",
+    "clear": "清除",
+    "loading": "加载中...",
+    "noResults": "没有找到匹配结果",
+    "error": "出错了，请稍后重试",
+    "favorite": "添加收藏",
+    "unfavorite": "取消收藏"
+  },
+  "home": {
+    "eyebrow": "游戏导航",
+    "title": "GameGuide",
+    "description": "汇集热门游戏平台、资讯媒体、社区与工具，一站直达你的游戏世界。",
+    "searchPlaceholder": "搜索游戏网站、资讯、攻略… 按 / 聚焦",
+    "searchHint": "按 / 键快速搜索",
+    "featured": "今日精选",
+    "featuredDesc": "快速访问权威游戏站点、新闻媒体和社区资源。",
+    "sitesCount": "热门站点",
+    "recommendCount": "实时推荐",
+    "infoCount": "游戏资讯",
+    "sectionTitle": "游戏导航目录",
+    "sectionDesc": "根据标签快速查找你需要的游戏资源。",
+    "resultsCount": "个匹配结果",
+    "clearSearch": "清除搜索"
+  },
+  "deals": {
+    "eyebrow": "游戏折扣",
+    "title": "全网最低价",
+    "description": "搜索游戏名称，比较 Steam、Epic、GOG、WeGame 等平台的价格，找到最优惠的购买渠道。",
+    "searchPlaceholder": "搜索游戏名称...",
+    "searching": "搜索中...",
+    "search": "搜索",
+    "noResults": "未找到相关游戏，请尝试其他关键词",
+    "startSearch": "输入游戏名称开始搜索",
+    "loading": "正在搜索游戏价格...",
+    "searchFailed": "搜索失败，请稍后重试",
+    "noPrice": "暂无价格",
+    "cheapestLabel": "最低价"
+  },
+  "favorites": {
+    "title": "我的收藏",
+    "description": "收藏你喜欢的游戏站点，方便快速访问。",
+    "empty": "还没有收藏任何站点",
+    "emptyHint": "点击站点卡片的 ☆ 按钮添加收藏"
+  },
+  "category": {
+    "all": "全部",
+    "store": "商店",
+    "community": "社区",
+    "media": "媒体",
+    "streaming": "直播",
+    "tool": "工具",
+    "data": "数据",
+    "indie": "独立",
+    "deal": "优惠"
+  },
+  "siteCard": {
+    "visit": "访问 →"
+  }
+}

@@ -662,3 +662,26 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+/* Language Toggle */
+.lang-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(15, 24, 48, 0.9);
+  border: 1px solid rgba(124, 91, 255, 0.3);
+  color: #c7d1ff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.lang-toggle:hover {
+  background: rgba(124, 91, 255, 0.2);
+  border-color: rgba(124, 91, 255, 0.5);
+}
