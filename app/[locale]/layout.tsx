@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { locales } from '../../i18n';
 import AdSenseLoader from '../components/AdSenseLoader';
 import { LanguageToggle } from '../components/LanguageToggle';
+import { SiteHeader } from '../components/SiteHeader';
 
 export const metadata: Record<string, Metadata> = {
   zh: {
@@ -81,6 +82,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         />
       </head>
       <body>
+        <SiteHeader />
         <NextIntlClientProvider messages={messages}>
           <LanguageToggle className="lang-toggle-fixed" />
           <AdSenseLoader />
