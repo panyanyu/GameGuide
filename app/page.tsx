@@ -92,6 +92,7 @@ export default function HomePage() {
           </div>
           <div className="hero-tags">
             <span>按 / 键快速搜索</span>
+            <a href="/deals" className="category-tag">折扣比价</a>
           </div>
         </div>
         <div className="hero-visual">
