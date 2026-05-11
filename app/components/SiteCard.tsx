@@ -1,12 +1,24 @@
+'use client';
+
 import { Site } from '../types';
 
 interface SiteCardProps {
   site: Site;
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  favoriteLabel?: string;
+  unfavoriteLabel?: string;
+  visitText?: string;
 }
 
-export default function SiteCard({ site, isFavorite, onToggleFavorite }: SiteCardProps) {
+export default function SiteCard({
+  site,
+  isFavorite,
+  onToggleFavorite,
+  favoriteLabel = '添加收藏',
+  unfavoriteLabel = '取消收藏',
+  visitText = '访问 →',
+}: SiteCardProps) {
   return (
     <a
       href={site.url}
@@ -27,12 +39,12 @@ export default function SiteCard({ site, isFavorite, onToggleFavorite }: SiteCar
             e.stopPropagation();
             onToggleFavorite();
           }}
-          aria-label={isFavorite ? '取消收藏' : '添加收藏'}
+          aria-label={isFavorite ? unfavoriteLabel : favoriteLabel}
           type="button"
         >
           {isFavorite ? '★' : '☆'}
         </button>
-        <span className="visit-link">访问 →</span>
+        <span className="visit-link">{visitText}</span>
       </div>
     </a>
   );
