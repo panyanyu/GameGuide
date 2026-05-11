@@ -82,7 +82,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         />
       </head>
       <body>
-        <SiteHeader />
+        <SiteHeader locale={locale} />
         <NextIntlClientProvider messages={messages}>
           <LanguageToggle className="lang-toggle-fixed" />
           <AdSenseLoader />

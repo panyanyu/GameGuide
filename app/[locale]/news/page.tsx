@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
-import { useNewsFeed } from '../hooks/useNewsFeed';
-import NewsList from '../components/NewsList';
-import ImageModal from '../components/ImageModal';
+import { useNewsFeed } from '../../hooks/useNewsFeed';
+import NewsList from '../../components/NewsList';
+import ImageModal from '../../components/ImageModal';
 
 export default function NewsPage() {
   const { items, loading, error, hasMore, loadMore, refresh } = useNewsFeed();

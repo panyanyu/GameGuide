@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLocale } from 'next-intl';
 
 const NAV_ITEMS = [
   { href: '', label: '首页', labelEn: 'Home', icon: '🏠' },
@@ -10,8 +9,11 @@ const NAV_ITEMS = [
   { href: '/deals', label: '折扣', labelEn: 'Deals', icon: '🏷️' },
 ];
 
-export function SiteHeader() {
-  const locale = useLocale();
+interface SiteHeaderProps {
+  locale: string;
+}
+
+export function SiteHeader({ locale }: SiteHeaderProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {

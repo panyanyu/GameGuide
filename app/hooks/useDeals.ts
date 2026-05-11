@@ -1,8 +1,33 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { GameDeal, ITADSearchResult } from '../types/deals';
-import { ITAD_BASE_URL, ITAD_API_KEY, SUPPORTED_SHOPS } from '../data/deals';
+import { GameDeal } from '../types/deals';
+
+interface ITADSearchResult {
+  id: string;
+  slug: string;
+  title: string;
+  type: string;
+  mature: boolean;
+  assets: {
+    boxart?: string;
+    banner145?: string;
+    banner300?: string;
+  };
+}
+
+interface ITADPriceResult {
+  id: string;
+  deals: Array<{
+    shop: { id: number; name: string };
+    price: { amount: number; currency: string };
+    cut: number;
+    url: string;
+  }>;
+  historyLow: {
+    all: { amount: number; currency: string };
+  };
+}
 
 interface UseDealsReturn {
   results: GameDeal[];
@@ -24,74 +49,56 @@ export function useDeals(): UseDealsReturn {
     setError(null);
 
     try {
-      const searchUrl = `${ITAD_BASE_URL}/v01/search/search/?title=${encodeURIComponent(query)}&limit=8&key=${ITAD_API_KEY}`;
+      // Search for games
+      const searchUrl = `/api/deals?title=${encodeURIComponent(query)}&limit=8`;
       const searchRes = await fetch(searchUrl);
-      const searchData = await searchRes.json();
+      const searchData: ITADSearchResult[] = await searchRes.json();
 
-      if (!searchData.data || searchData.data.length === 0) {
+      if (!searchData || searchData.length === 0) {
         setResults([]);
         setLoading(false);
         return;
       }
 
-      const games: GameDeal[] = await Promise.all(
-        searchData.data.map(async (game: ITADSearchResult) => {
-          const shopPrices = await Promise.all(
-            SUPPORTED_SHOPS.map(async (shop) => {
-              try {
-                const priceUrl = `${ITAD_BASE_URL}/v01/game/${shop.id}/${game.id}/prices/?key=${ITAD_API_KEY}`;
-                const priceRes = await fetch(priceUrl);
-                const priceData = await priceRes.json();
+      // Fetch prices for all games in one call
+      const gameIds = searchData.map((g) => g.id);
+      const pricesRes = await fetch('/api/deals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(gameIds),
+      });
+      const pricesData: ITADPriceResult[] = await pricesRes.json();
 
-                if (priceData.data && priceData.data.current) {
-                  return {
-                    shop: shop.id,
-                    shopName: shop.name,
-                    price: priceData.data.current.price,
-                    cut: priceData.data.cut || 0,
-                    url: priceData.data.url || '',
-                  };
-                }
-                return {
-                  shop: shop.id,
-                  shopName: shop.name,
-                  price: null,
-                  cut: 0,
-                  url: '',
-                };
-              } catch {
-                return {
-                  shop: shop.id,
-                  shopName: shop.name,
-                  price: null,
-                  cut: 0,
-                  url: '',
-                };
-              }
-            })
-          );
+      // Create price lookup map
+      const priceMap = new Map<string, ITADPriceResult>();
+      pricesData.forEach((p) => priceMap.set(p.id, p));
 
-          const pricesWithDeal = shopPrices.filter((p) => p.price !== null);
-          const cheapest = pricesWithDeal.length > 0
-            ? Math.min(...pricesWithDeal.map((p) => p.price as number))
-            : null;
-          const cheapestCut = pricesWithDeal.length > 0
-            ? Math.max(...pricesWithDeal.map((p) => p.cut))
-            : 0;
+      const games: GameDeal[] = searchData.map((game) => {
+        const priceInfo = priceMap.get(game.id);
+        const deals = priceInfo?.deals || [];
+        const cheapestDeal = deals.length > 0
+          ? deals.reduce((min, d) => (d.price.amount < min.price.amount ? d : min))
+          : null;
 
-          return {
-            id: game.id,
-            title: game.title,
-            image: game.image,
-            shops: shopPrices,
-            cheapest,
-            cheapestCut,
-          };
-        })
-      );
+        return {
+          id: game.id,
+          title: game.title,
+          image: game.assets.boxart || '',
+          shops: deals.map((d) => ({
+            shop: d.shop.id.toString(),
+            shopName: d.shop.name,
+            price: d.price.amount,
+            cut: d.cut,
+            url: d.url,
+          })),
+          cheapest: cheapestDeal?.price.amount || null,
+          cheapestCut: cheapestDeal?.cut || 0,
+        };
+      });
 
       setResults(games);
     } catch (err) {
+      console.error('Deals search error:', err);
       setError('搜索失败，请稍后重试');
       setResults([]);
     } finally {

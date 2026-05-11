@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import { ADSENSE_CONFIG } from '../../config/adsense';
 import { curatedSites } from '../data/sites';
 import CategoryNav from '../components/CategoryNav';
 import SiteCard from '../components/SiteCard';
@@ -10,10 +9,12 @@ import FavoritesPanel from '../components/FavoritesPanel';
 import { useFavorites } from '../hooks/useFavorites';
 import { useKeyboard } from '../hooks/useKeyboard';
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import NewsSection from '../components/NewsSection';
 import { useNewsFeed } from '../hooks/useNewsFeed';
 
 export default function HomePage() {
+  const locale = useLocale();
   const t = useTranslations('home');
   const tCategory = useTranslations('category');
   const tFavorites = useTranslations('favorites');
@@ -45,7 +46,11 @@ export default function HomePage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-      (window as any).adsbygoogle.push({});
+      try {
+        (window as any).adsbygoogle.push({});
+      } catch (e) {
+        // Ignore duplicate push errors
+      }
     }
   }, []);
 
@@ -121,7 +126,7 @@ export default function HomePage() {
           </div>
           <div className="hero-tags">
             <span>{t('searchHint')}</span>
-            <Link href="/deals" className="category-tag">{tCommon('deals')}</Link>
+            <Link href={`/${locale}/deals`} className="category-tag">{tCommon('deals')}</Link>
           </div>
         </div>
         <div className="hero-visual">
@@ -145,17 +150,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <section className="adsense-block">
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block', textAlign: 'center' }}
-          data-ad-client={ADSENSE_CONFIG.clientId}
-          data-ad-slot={ADSENSE_CONFIG.homepageSlot}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-      </section>
+ 
 
       <NewsSection
         items={items.slice(0, 5)}

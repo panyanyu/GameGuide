@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import { DealsSearch } from '../../components/DealsSearch';
 import { DealsGrid } from '../../components/DealsGrid';
 import { useDeals } from '../../hooks/useDeals';
 
 export default function DealsPage() {
+  const locale = useLocale();
   const t = useTranslations('deals');
-  const tCommon = useTranslations('common');
 
   const { results, loading, error, search } = useDeals();
   const [hasSearched, setHasSearched] = useState(false);
@@ -20,6 +22,9 @@ export default function DealsPage() {
 
   return (
     <div className="page-shell">
+      <div className="page-nav">
+        <Link href={`/${locale}`}>&larr; {locale === 'zh' ? '返回首页' : 'Back to Home'}</Link>
+      </div>
       <div className="deals-hero">
         <div className="eyebrow">{t('eyebrow')}</div>
         <h1>{t('title')}</h1>
