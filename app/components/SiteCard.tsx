@@ -17,21 +17,12 @@ export default function SiteCard({
   onToggleFavorite,
   favoriteLabel = '添加收藏',
   unfavoriteLabel = '取消收藏',
-  visitText = '访问 →',
+  visitText = '访问',
 }: SiteCardProps) {
   return (
-    <a
-      href={site.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="site-card"
-    >
-      <div className="site-card-content">
-        <p className="site-tag">{site.tag}</p>
-        <h3>{site.name}</h3>
-        <p>{site.description}</p>
-      </div>
-      <div className="site-card-footer">
+    <a href={site.url} target="_blank" rel="noopener noreferrer" className="site-card">
+      <div className="site-card-header">
+        <span className="site-tag">{site.tag}</span>
         <button
           className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
           onClick={(e) => {
@@ -44,8 +35,10 @@ export default function SiteCard({
         >
           {isFavorite ? '★' : '☆'}
         </button>
-        <span className="visit-link">{visitText}</span>
       </div>
+      <h3 className="site-card-title">{site.name}</h3>
+      <p className="site-card-desc">{site.description}</p>
+      <span className="site-card-link">{visitText} ↗</span>
     </a>
   );
 }

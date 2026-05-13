@@ -3,15 +3,12 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { curatedSites } from '../data/sites';
-import CategoryNav from '../components/CategoryNav';
 import SiteCard from '../components/SiteCard';
 import FavoritesPanel from '../components/FavoritesPanel';
 import { useFavorites } from '../hooks/useFavorites';
 import { useKeyboard } from '../hooks/useKeyboard';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
-import NewsSection from '../components/NewsSection';
-import { useNewsFeed } from '../hooks/useNewsFeed';
 
 export default function HomePage() {
   const locale = useLocale();
@@ -26,7 +23,6 @@ export default function HomePage() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { items, loading, error, refresh } = useNewsFeed();
 
   const handleSlash = useCallback(() => {
     searchRef.current?.focus();
@@ -125,8 +121,8 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hero-tags">
-            <span>{t('searchHint')}</span>
-            <Link href={`/${locale}/deals`} className="category-tag">{tCommon('deals')}</Link>
+            <Link href={`/${locale}/news`} className="category-tag">📰 {tCommon('news') || '资讯'}</Link>
+            <Link href={`/${locale}/deals`} className="category-tag">🏷️ {tCommon('deals')}</Link>
           </div>
         </div>
         <div className="hero-visual">
@@ -150,14 +146,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
- 
-
-      <NewsSection
-        items={items.slice(0, 5)}
-        loading={loading}
-        error={error}
-        onRefresh={refresh}
-      />
 
       <section className="section-block">
         <div className="section-header">
@@ -205,7 +193,11 @@ export default function HomePage() {
                 {t('clearSearch')}
               </button>
             </div>
-          ) : null}
+          ) : (
+            <div className="empty-state">
+              <p>{tCommon('noResults')}</p>
+            </div>
+          )}
         </div>
       </section>
 

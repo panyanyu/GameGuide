@@ -2,11 +2,14 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
+import { useLocale } from 'next-intl';
 import { useNewsFeed } from '../../hooks/useNewsFeed';
 import NewsList from '../../components/NewsList';
 import ImageModal from '../../components/ImageModal';
+import { Breadcrumb } from '../../components/Breadcrumb';
 
 export default function NewsPage() {
+  const locale = useLocale();
   const { items, loading, error, hasMore, loadMore, refresh } = useNewsFeed();
   const [modalImage, setModalImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -17,6 +20,12 @@ export default function NewsPage() {
         <meta name="description" content="汇集 Steam、3DM、游民星空、NGA 等游戏媒体的最新资讯" />
       </Head>
       <main className="page-shell">
+        <Breadcrumb
+          items={[
+            { label: locale === 'zh' ? '首页' : 'Home', href: `/${locale}` },
+            { label: locale === 'zh' ? '游戏资讯' : 'News' },
+          ]}
+        />
         <section className="news-page-header">
           <h1>🎮 游戏资讯</h1>
           <button
