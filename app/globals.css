@@ -535,17 +535,40 @@ h1 {
 }
 
 .deals-grid {
-  display: grid;
+  display: flex;
   gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.deals-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.deals-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.deals-grid::-webkit-scrollbar-thumb {
+  background: rgba(124, 91, 255, 0.4);
+  border-radius: 3px;
+}
+
+.deals-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 91, 255, 0.6);
 }
 
 .deal-card {
+  flex: 0 0 320px;
   border-radius: 24px;
   background: rgba(17, 28, 55, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
   transition: transform 0.2s ease, border-color 0.2s ease;
+  scroll-snap-align: start;
 }
 
 .deal-card:hover {
@@ -659,7 +682,11 @@ h1 {
   }
 
   .deals-grid {
-    grid-template-columns: 1fr;
+    flex-wrap: nowrap;
+  }
+
+  .deal-card {
+    flex: 0 0 280px;
   }
 }
 
