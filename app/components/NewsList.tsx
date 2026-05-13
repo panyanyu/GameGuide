@@ -43,7 +43,7 @@ export default function NewsList({
 
   return (
     <div className="news-list">
-      <div className="masonry-grid">
+      <div className="news-list-vertical">
         {items.map((item) => (
           <NewsCard key={item.id} item={item} onImageClick={onImageClick} />
         ))}
@@ -52,11 +52,11 @@ export default function NewsList({
         {loading && (
           <div className="loading-spinner">
             <div className="spinner"></div>
-            <p>加载中...</p>
+            <p>Loading...</p>
           </div>
         )}
         {!hasMore && items.length > 0 && (
-          <p className="no-more">已加载全部新闻</p>
+          <p className="no-more">All news loaded</p>
         )}
       </div>
     </div>

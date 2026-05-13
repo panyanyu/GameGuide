@@ -2,6 +2,8 @@
 
 Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
 
+完成修改后自己运行访问一遍进行验证
+
 Available skills:
 - /office-hours
 - /plan-ceo-review
