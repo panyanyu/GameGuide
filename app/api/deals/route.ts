@@ -1,9 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ITAD_BASE_URL, ITAD_API_KEY } from '../../data/deals';
 
+const MYMEMORY_URL = 'https://api.mymemory.translated.net/get';
+
+function isChinese(text: string): boolean {
+  return /[一-龥]/.test(text);
+}
+
+async function translateToEnglish(text: string): Promise<string> {
+  if (!isChinese(text)) return text;
+
+  try {
+    const url = `${MYMEMORY_URL}?q=${encodeURIComponent(text)}&langpair=zh|en`;
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.responseStatus === 200 && data.responseData?.translatedText) {
+      return data.responseData.translatedText;
+    }
+  } catch (error) {
+    console.error('Translation error:', error);
+  }
+  return text;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title');
+  let title = searchParams.get('title') || '';
   const limit = searchParams.get('limit') || '8';
 
   if (!title) {
@@ -11,7 +33,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    const searchUrl = `${ITAD_BASE_URL}/games/search/v1?title=${encodeURIComponent(title)}&results=${limit}&key=${ITAD_API_KEY}`;
+    const translatedTitle = await translateToEnglish(title);
+    const searchUrl = `${ITAD_BASE_URL}/games/search/v1?title=${encodeURIComponent(translatedTitle)}&results=${limit}&key=${ITAD_API_KEY}`;
     const response = await fetch(searchUrl);
 
     if (!response.ok) {
