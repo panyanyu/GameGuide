@@ -11,8 +11,3 @@ export default getRequestConfig(async () => {
     messages: (await import(`./messages/${locale}.json`)).default,
   };
 });
-
-async function getLocale(): Promise<Locale> {
-  // This will be overridden by middleware for locale routing
-  return defaultLocale;
-}
