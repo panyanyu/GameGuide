@@ -6,6 +6,8 @@
     "search": "Search",
     "clear": "Clear",
     "loading": "Loading...",
+    "refresh": "Refresh",
+    "retry": "Retry",
     "noResults": "No matching results",
     "error": "Something went wrong, please try again",
     "favorite": "Add to favorites",

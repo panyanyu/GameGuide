@@ -6,6 +6,8 @@
     "search": "搜索",
     "clear": "清除",
     "loading": "加载中...",
+    "refresh": "刷新",
+    "retry": "重试",
     "noResults": "没有找到匹配结果",
     "error": "出错了，请稍后重试",
     "favorite": "添加收藏",

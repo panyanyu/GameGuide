@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useNewsFeed } from '../../hooks/useNewsFeed';
 import NewsList from '../../components/NewsList';
 import ImageModal from '../../components/ImageModal';
@@ -30,14 +30,14 @@ export default function NewsPage() {
           ]}
         />
         <section className="news-page-header">
-          <h1>🎮 游戏资讯</h1>
+          <h1>🎮 {tCommon('news')}</h1>
           <button
             className="refresh-button"
             onClick={refresh}
             disabled={loading}
             type="button"
           >
-            {loading ? '刷新中...' : '刷新'}
+            {loading ? tCommon('loading') : tCommon('refresh') || '刷新'}
           </button>
         </section>
 
@@ -45,7 +45,7 @@ export default function NewsPage() {
           <div className="news-error">
             <p>⚠ {error}</p>
             <button className="refresh-button" onClick={refresh} type="button">
-              重试
+              {tCommon('retry') || '重试'}
             </button>
           </div>
         ) : (
