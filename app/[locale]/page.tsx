@@ -10,6 +10,28 @@ import { useKeyboard } from '../hooks/useKeyboard';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 
+const TAG_TO_KEY: Record<string, string> = {
+  '商店': 'store',
+  '社区': 'community',
+  '媒体': 'media',
+  '直播': 'streaming',
+  '工具': 'tool',
+  '数据': 'data',
+  '独立': 'indie',
+  '优惠': 'deal',
+};
+
+const KEY_TO_TAG: Record<string, string> = {
+  store: '商店',
+  community: '社区',
+  media: '媒体',
+  streaming: '直播',
+  tool: '工具',
+  data: '数据',
+  indie: '独立',
+  deal: '优惠',
+};
+
 export default function HomePage() {
   const locale = useLocale();
   const t = useTranslations('home');
@@ -19,7 +41,7 @@ export default function HomePage() {
   const tCommon = useTranslations('common');
 
   const [query, setQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('全部');
+  const [activeCategory, setActiveCategory] = useState('all');
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
@@ -53,8 +75,11 @@ export default function HomePage() {
   const filteredSites = useMemo(() => {
     let sites = curatedSites;
 
-    if (activeCategory !== '全部') {
-      sites = sites.filter((site) => site.tag === activeCategory);
+    if (activeCategory !== 'all') {
+      const tag = KEY_TO_TAG[activeCategory];
+      if (tag) {
+        sites = sites.filter((site) => site.tag === tag);
+      }
     }
 
     if (query.trim()) {
@@ -73,24 +98,18 @@ export default function HomePage() {
   const hasResults = filteredSites.length > 0;
   const hasSearch = query.trim() !== '';
 
-  const allTags = useMemo(() => {
-    const tags = new Set<string>(['全部']);
-    curatedSites.forEach((site) => tags.add(site.tag));
-    return Array.from(tags);
+  const allCategoryKeys = useMemo(() => {
+    const keys = new Set<string>(['all']);
+    curatedSites.forEach((site) => {
+      const key = TAG_TO_KEY[site.tag];
+      if (key) keys.add(key);
+    });
+    return Array.from(keys);
   }, []);
 
-  const getCategoryKey = (tag: string): string => {
-    const mapping: Record<string, string> = {
-      '商店': 'store',
-      '社区': 'community',
-      '媒体': 'media',
-      '直播': 'streaming',
-      '工具': 'tool',
-      '数据': 'data',
-      '独立': 'indie',
-      '优惠': 'deal',
-    };
-    return mapping[tag] || tag;
+  const getCategoryLabel = (key: string): string => {
+    if (key === 'all') return tCategory('all');
+    return tCategory(key);
   };
 
   return (
@@ -121,7 +140,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hero-tags">
-            <Link href={`/${locale}/news`} className="category-tag">📰 {tCommon('news') || '资讯'}</Link>
+            <Link href={`/${locale}/news`} className="category-tag">📰 {tCommon('news')}</Link>
             <Link href={`/${locale}/deals`} className="category-tag">🏷️ {tCommon('deals')}</Link>
           </div>
         </div>
@@ -155,14 +174,14 @@ export default function HomePage() {
           </div>
           <span>{filteredSites.length} {t('resultsCount')}</span>
         </div>
-        <nav className="category-nav" aria-label="站点分类">
-          {allTags.map((tag) => (
+        <nav className="category-nav" aria-label={tCategory('navLabel') || 'Categories'}>
+          {allCategoryKeys.map((key) => (
             <button
-              key={tag}
-              className={`category-tag ${activeCategory === tag ? 'active' : ''}`}
-              onClick={() => setActiveCategory(tag)}
+              key={key}
+              className={`category-tag ${activeCategory === key ? 'active' : ''}`}
+              onClick={() => setActiveCategory(key)}
             >
-              {tag === '全部' ? tCategory('all') : tCategory(getCategoryKey(tag))}
+              {getCategoryLabel(key)}
             </button>
           ))}
         </nav>
@@ -186,7 +205,7 @@ export default function HomePage() {
                 className="refresh-button"
                 onClick={() => {
                   setQuery('');
-                  setActiveCategory('全部');
+                  setActiveCategory('all');
                 }}
                 type="button"
               >
@@ -210,7 +229,7 @@ export default function HomePage() {
           description={tFavorites('description')}
           emptyText={tFavorites('empty')}
           emptyHint={tFavorites('emptyHint')}
-          favoriteCountText={(count) => `你收藏了 ${count} 个站点`}
+          favoriteCountText={(count) => tCommon('favoriteCount', { count })}
         />
       )}
     </main>

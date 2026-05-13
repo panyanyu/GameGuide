@@ -11,6 +11,7 @@ import { Breadcrumb } from '../../components/Breadcrumb';
 export default function DealsPage() {
   const locale = useLocale();
   const t = useTranslations('deals');
+  const tCommon = useTranslations('common');
 
   const { results, loading, error, search } = useDeals();
   const [hasSearched, setHasSearched] = useState(false);
@@ -24,8 +25,8 @@ export default function DealsPage() {
     <div className="page-shell">
       <Breadcrumb
         items={[
-          { label: locale === 'zh' ? '首页' : 'Home', href: `/${locale}` },
-          { label: locale === 'zh' ? '游戏价格' : 'Game Deals' },
+          { label: tCommon('home'), href: `/${locale}` },
+          { label: tCommon('deals') },
         ]}
       />
       <div className="deals-hero">

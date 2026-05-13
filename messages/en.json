@@ -1,6 +1,7 @@
 {
   "common": {
     "home": "Home",
+    "news": "News",
     "deals": "Deals",
     "search": "Search",
     "clear": "Clear",
@@ -8,7 +9,8 @@
     "noResults": "No matching results",
     "error": "Something went wrong, please try again",
     "favorite": "Add to favorites",
-    "unfavorite": "Remove from favorites"
+    "unfavorite": "Remove from favorites",
+    "favoriteCount": "You have {count} favorite sites"
   },
   "home": {
     "eyebrow": "Game Guide",
@@ -55,7 +57,8 @@
     "tool": "Tool",
     "data": "Data",
     "indie": "Indie",
-    "deal": "Deals"
+    "deal": "Deals",
+    "navLabel": "Categories"
   },
   "siteCard": {
     "visit": "Visit →"

@@ -10,20 +10,23 @@ import { Breadcrumb } from '../../components/Breadcrumb';
 
 export default function NewsPage() {
   const locale = useLocale();
+  const tCommon = useTranslations('common');
   const { items, loading, error, hasMore, loadMore, refresh } = useNewsFeed();
   const [modalImage, setModalImage] = useState<{ src: string; alt: string } | null>(null);
 
   return (
     <>
       <Head>
-        <title>游戏资讯 - GameGuide</title>
-        <meta name="description" content="汇集 Steam、3DM、游民星空、NGA 等游戏媒体的最新资讯" />
+        <title>{tCommon('news')} - GameGuide</title>
+        <meta name="description" content={locale === 'zh'
+          ? '汇集 Steam、3DM、游民星空、NGA 等游戏媒体的最新资讯'
+          : 'Latest gaming news from Steam, 3DM, Gamersky, NGA and more'} />
       </Head>
       <main className="page-shell">
         <Breadcrumb
           items={[
-            { label: locale === 'zh' ? '首页' : 'Home', href: `/${locale}` },
-            { label: locale === 'zh' ? '游戏资讯' : 'News' },
+            { label: tCommon('home'), href: `/${locale}` },
+            { label: tCommon('news') },
           ]}
         />
         <section className="news-page-header">

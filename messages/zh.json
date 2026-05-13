@@ -1,6 +1,7 @@
 {
   "common": {
     "home": "首页",
+    "news": "资讯",
     "deals": "折扣",
     "search": "搜索",
     "clear": "清除",
@@ -8,7 +9,8 @@
     "noResults": "没有找到匹配结果",
     "error": "出错了，请稍后重试",
     "favorite": "添加收藏",
-    "unfavorite": "取消收藏"
+    "unfavorite": "取消收藏",
+    "favoriteCount": "你收藏了 {count} 个站点"
   },
   "home": {
     "eyebrow": "游戏导航",
@@ -55,7 +57,8 @@
     "tool": "工具",
     "data": "数据",
     "indie": "独立",
-    "deal": "优惠"
+    "deal": "优惠",
+    "navLabel": "站点分类"
   },
   "siteCard": {
     "visit": "访问 →"
