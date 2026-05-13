@@ -26,7 +26,14 @@ export function DealCard({ game, cheapestLabel = '最低价', noPriceText = '暂
         )}
       </div>
       <div className="deal-card-content">
-        <h3 className="deal-card-title">{game.title}</h3>
+        <div className="deal-card-info">
+          <h3 className="deal-card-title">{game.title}</h3>
+          {game.cheapest !== null && game.cheapestCut > 0 && (
+            <div className="deal-cheapest">
+              {cheapestLabel}: ¥{game.cheapest.toFixed(2)} (-{game.cheapestCut}%)
+            </div>
+          )}
+        </div>
         <div className="deal-card-shops">
           {game.shops.map((shop) => (
             <a
@@ -53,11 +60,6 @@ export function DealCard({ game, cheapestLabel = '最低价', noPriceText = '暂
             </a>
           ))}
         </div>
-        {game.cheapest !== null && game.cheapestCut > 0 && (
-          <div className="deal-cheapest">
-            {cheapestLabel}: ¥{game.cheapest.toFixed(2)} (-{game.cheapestCut}%)
-          </div>
-        )}
       </div>
     </div>
   );
